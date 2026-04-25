@@ -315,12 +315,17 @@ select option {
   letter-spacing:0.06em;
 }
 .result-card {
-  z-index:-1;
+  position: relative;
+  z-index: 1;
   margin-top:1.6rem;
   display:none;
   opacity:0;
   transform:translateY(12px);
   transition:opacity 0.5s,transform 0.5s;
+}
+/* Dropdown open: card stays visible but yields pointer events */
+.result-card.dropdown-open {
+  pointer-events: none;
 }
 .result-card.visible {
   display:block;
@@ -546,15 +551,15 @@ select option {
     </div>
     <div class="search-form">
       <div class="sentence-row">
-        <span class="sentence-word">I'm a</span>
+        <span class="sentence-word">I am</span>
         <select id="audience-select">
-          <option value="Founder">Founder</option>
-          <option value="Engineer">Engineer</option>
-          <option value="Designer">Designer</option>
-          <option value="Recruiter">Recruiter</option>
-          <option value="General Audience">General Audience</option>
+          <option value="Founder">a Founder</option>
+          <option value="Engineer">an Engineer</option>
+          <option value="Designer">a Designer</option>
+          <option value="Recruiter">a Recruiter</option>
+          <option value="General Audience">a General Audience visitor</option>
         </select>
-        <span class="sentence-word">and want to know about</span>
+        <span class="sentence-word" id="want-to-know">— what should I know?</span>
       </div>
       <div class="sentence-row">
         <div class="topic-wrap">
@@ -675,7 +680,7 @@ LIQUIDTALENT (June 2014 – Jan 2015, age 16)
 
 EDUCATION
 Stuyvesant High School (2011–2015). ACT 36/36 — perfect score.
-UIUC (2015–2017, James Scholar honors program, left to pursue engineering career).
+UIUC (2015–2017, James Scholar honors program, failed out Fall 2017 — returned home and committed fully to engineering career).
 College of Staten Island (current, CS major, part-time).
 
 MUSIC — k_uma
@@ -685,7 +690,7 @@ Self-directed music videos. Planning wider release.
 
 WHAT MAKES KUMA DIFFERENT
 - Principal engineer AND principal designer at the same company — a genuinely rare combination.
-- Built real fintech products used by institutional investors from scratch, as the sole developer.
+- Built real fintech products for wealth managers and institutional partners from scratch, as the sole developer — kept live for high-stakes demos with BlackRock and Two Sigma.
 - Self-directed: organized events, cold-called Microsoft, appeared on podcasts.
 - Exceptional communicator — multiple employers note his writing, presence, and professionalism as standout.
 - Obsessive attention to detail. Real personal arc through adversity, now building across tech and music simultaneously.
@@ -735,14 +740,14 @@ const PREBAKED = {
   "Founder": {
     "early hire": {
       headline: "Employee #3 at a Schwab-approved fintech — I know what founding feels like.",
-      narrative: "At Freemarkets AI I was the third person on the team, the only engineer, and eventually the only designer too. I built the entire product stack — React, Django, real-time market data — directly with the CEO, in a room with Physics PhDs and ex-JP Morgan professionals. The platform I built ended up listed on Charles Schwab's provider solutions page. I know how to operate with no playbook, no hand-holding, and real institutional stakes.",
+      narrative: "At Freemarkets AI I was the third person on the team, the only engineer, and eventually the only designer too. I built the entire product stack — React, Django, real-time market data — directly with the CEO. The platform I built ended up listed on Charles Schwab's provider solutions page, and we had real meetings with partners like BlackRock and Two Sigma. I know how to operate with no playbook, no hand-holding, and high-stakes visibility.",
       evidence: ["Employee #3 at a fintech startup — sole engineer and sole designer simultaneously","CEO gave a $10k raise within weeks; platform approved for Charles Schwab distribution","Won MIT Hacking Arts hackathon by cold-pitching Spotify + Autodesk; cold-called Microsoft for a venue as hackathon organizer"],
       tags: ["early stage","founding engineer","full ownership"]
     },
     "build from scratch": {
       headline: "I've built entire products from zero — alone, under pressure, for real users.",
-      narrative: "Freemarkets AI was a greenfield build: no existing codebase, no design system, no second developer. I architected the data layer, designed every screen, and shipped a product that PhDs and ex-JP Morgan traders used daily. That's not a side project — that's a company's entire technical foundation, built by one person.",
-      evidence: ["Sole developer and designer for a fintech platform used by institutional investors","Stack: React + Django + real-time market data APIs, built end-to-end","Platform listed on Charles Schwab's provider solutions page after passing institutional due diligence"],
+      narrative: "Freemarkets AI was a greenfield build: no existing codebase, no design system, no second developer. I architected the data layer, designed every screen, and shipped a product that the CEO used for live presentations to investors and partners including BlackRock. That's not a side project — that's a company's entire technical foundation, built by one person.",
+      evidence: ["Sole developer and designer for a fintech platform built for wealth managers and institutional partners","Stack: React + Django + real-time market data APIs, built end-to-end","Platform listed on Charles Schwab's provider solutions page after passing institutional due diligence"],
       tags: ["greenfield","full stack","principal engineer"]
     },
     "trust": {
@@ -755,33 +760,33 @@ const PREBAKED = {
   "Engineer": {
     "react": {
       headline: "I became a React expert under pressure — building for PhDs with real money on the line.",
-      narrative: "My React depth came from Freemarkets AI, where I was the only developer building a real-time market data platform for institutional investors. No tutorials, no senior engineer to ask — just the CEO, the requirements, and the pressure of knowing that actual financial professionals were using what I shipped. I've been working in the React ecosystem for 8 years across fintech and media.",
-      evidence: ["8 years React experience across fintech (Freemarkets, SaveAway) and media (IGN)","Built real-time market data interfaces with React + Django used by Physics PhDs and ex-JP Morgan traders","Won company-wide hackathon at IGN in 2015 — shipped lightbox feature to production on the main website"],
+      narrative: "My React depth came from Freemarkets AI, where I was the only developer building a real-time market data platform for institutional investors. No tutorials, no senior engineer to ask — just the CEO, the requirements, and the care that comes from knowing the product needed to be solid for every presentation and partner meeting. I've been working in the React ecosystem for 8 years across fintech and media.",
+      evidence: ["8 years React experience across fintech (Freemarkets, SaveAway) and media (IGN)","Built real-time market data interfaces with React + Django — kept live and stable for CEO demos and partner meetings with firms like BlackRock","Won company-wide hackathon at IGN in 2015 — shipped lightbox feature to production on the main website"],
       tags: ["React","TypeScript","frontend systems"]
     },
     "typescript": {
-      headline: "TypeScript is the language I think in when the stakes are high.",
-      narrative: "After years of JavaScript at scale, TypeScript became my default for anything that matters. The discipline it enforces — explicit interfaces, predictable refactors — reflects how I approach all engineering: with care for the person who reads the code next. My component architecture work at Freemarkets was built to last, not just to ship.",
-      evidence: ["Principal Software Engineer at Freemarkets AI — TypeScript/React across the entire frontend","Owned end-to-end data flow: authentication, real-time market data, database architecture, cloud deployment","ACT 36/36 — the same obsessive precision applies to code as to standardized tests"],
+      headline: "My JavaScript runs deep — and TypeScript is where I want to take it next.",
+      narrative: "I have 8 years of JavaScript across fintech and media, and TypeScript represents exactly the kind of discipline I've always tried to bring to my code naturally — explicit, readable, built for the person who comes next. I haven't used TypeScript in a professional role yet, but it's the direction I'm actively building toward, and the mindset is already there.",
+      evidence: ["8 years JavaScript experience — Freemarkets AI, IGN, SaveAway, personal projects","Owned full frontend data flow at Freemarkets: auth, real-time market data, database architecture, cloud deployment","TypeScript is the next step — the precision it enforces matches how I already think about code"],
       tags: ["TypeScript","React","systems thinking"]
     },
     "production": {
       headline: "I've shipped to real users at real companies — not just personal projects.",
-      narrative: "Production experience, for me, means: a feature at IGN that millions of users encountered; a platform at Freemarkets that institutional investors trusted with their workflow; a React prototype at SaveAway that reframed how a fintech startup thought about its product. Each one had real stakes and real audiences.",
-      evidence: ["IGN Code Foo 2015 — shipped lightbox feature to production on a site with millions of monthly users","Freemarkets platform passed institutional due diligence and was listed on Charles Schwab's provider page","SaveAway React + Material UI prototype used to demonstrate new product direction to investors"],
+      narrative: "Production experience, for me, means: a feature at IGN that went live on a site with millions of monthly users; a platform at Freemarkets that I kept stable and live for the CEO's demos and partner meetings with firms like BlackRock; a React + Material UI prototype at SaveAway that the CEO responded to positively for its modern direction. Each one had real visibility and real care behind it.",
+      evidence: ["IGN Code Foo 2015 — shipped lightbox feature to production on a site with millions of monthly users","Freemarkets platform passed institutional due diligence and was listed on Charles Schwab's provider page","SaveAway React + Material UI prototype — well-received by CEO for its modern, accessible design direction"],
       tags: ["production","shipped","real users"]
     }
   },
   "Designer": {
     "design philosophy": {
       headline: "Design, for me, is the point where engineering stops being invisible.",
-      narrative: "I was given the title Principal UI/UX Designer at Freemarkets not because I asked for it, but because the CEO saw that my designs were better than anything he'd seen from contractors. I approach design from the engineering side — I understand constraints, I think about what's actually buildable, and I care about the micro-interactions that make something feel finished versus merely functional.",
+      narrative: "I asked to take on design responsibilities at Freemarkets — and was given the title Principal UI/UX Designer, which surprised me. The CEO complimented my designs for being intuitive compared to earlier prototypes, and I went on to write a formal design document outlining the work we needed external designers to execute. I approach design from the engineering side: I understand constraints, I think about what's buildable, and I care about the micro-interactions that separate finished from functional.",
       evidence: ["Dual title: Principal Software Engineer + Principal UI/UX Designer at Freemarkets AI","Started UI/UX work at 16 at LiquidTalent (3 World Trade Center) — analyzing Google Analytics, redesigning mobile app","MIT Hacking Arts 2016 winner: Sounditure — data-driven 3D furniture models from Spotify song metadata"],
       tags: ["design philosophy","UX","product thinking"]
     },
     "visual": {
       headline: "I design interfaces that feel inevitable — like they couldn't have been any other way.",
-      narrative: "Visual hierarchy isn't decoration — it's how you guide someone through a decision without them noticing they're being guided. I learned this at 16 doing UX work for LiquidTalent's mobile app, internalized it at IGN seeing how design decisions play out at scale, and sharpened it at Freemarkets where every pixel had to earn the trust of institutional investors.",
+      narrative: "My biggest design goal is accessibility — not in a technical checkbox sense, but making sure any new user can walk in and immediately understand what they're looking at. I learned the fundamentals at 16 at LiquidTalent, saw how design decisions play out at scale at IGN, and at Freemarkets I developed an eye for intuitive layouts that worked for both technical and non-technical visitors alike.",
       evidence: ["LiquidTalent CEO: 'made suggestions that were included in the final design choices' for mobile app redesign","Freemarkets platform's design passed institutional due diligence alongside the engineering","Bridgehacs hackathon: designed landing page, banner (Vistaprint), and all event materials — 98 RSVPs"],
       tags: ["visual design","hierarchy","interface"]
     }
@@ -795,8 +800,8 @@ const PREBAKED = {
     },
     "different": {
       headline: "Principal engineer and principal designer — at the same company, at the same time.",
-      narrative: "That combination is genuinely rare. Most engineers can't design. Most designers can't build. I've held both titles simultaneously at a company where the stakes were real — institutional investors, PhDs, JP Morgan alumni. Multiple employers have noted my communication as a standout quality, which means I can also explain what I'm building to stakeholders who aren't technical.",
-      evidence: ["Only person in company history to hold both Principal Software Engineer + Principal UI/UX Designer at Freemarkets AI","CEO recommendation: 'a rare and invaluable asset... outperformed peers in productivity and code quality'","Exceptional communicator: written recommendation from LiquidTalent CEO also highlights maturity and insight at age 16"],
+      narrative: "That combination is genuinely rare. Most engineers can't design. Most designers can't build. I've held both titles simultaneously at a company where the stakes were real — presenting to institutions like BlackRock, working alongside PhDs and JP Morgan alumni. I've worked closely with CEOs, CFOs, and CTOs throughout my career, and I believe that ability to communicate across levels is one of my strongest professional qualities.",
+      evidence: ["Only person in company history to hold both Principal Software Engineer + Principal UI/UX Designer at Freemarkets AI","CEO recommendation: 'a rare and invaluable asset... outperformed peers in productivity and code quality'","Track record working directly with CEOs (Freemarkets, SaveAway), CFOs, and CTOs — written recommendation from LiquidTalent CEO highlights maturity and insight at age 16"],
       tags: ["unique profile","dual track","communication"]
     },
     "accomplishments": {
@@ -815,14 +820,14 @@ const PREBAKED = {
     },
     "music": {
       headline: "k_uma hit 10,000 YouTube views in 28 days — on his own terms.",
-      narrative: "Under the name k_uma I make hip hop — cinematic, introspective, what I call post-movie-slow era. Songs like 'Can't', 'Again', 'Snow', 'Warmly'. I got 10,000+ YouTube views in 28 days with no label, no team, just self-directed videos shot on my phone in NYC. I have 220+ voice memos because I can't stop writing. I recently stepped into a studio in Newark, NJ for the first time. The wider release is coming.",
+      narrative: "Under the name k_uma I make hip hop — cinematic, introspective, the kind of music that hits differently late at night. Songs like 'Can't', 'Again', 'Snow', 'Warmly'. I got 10,000+ YouTube views in 28 days with no label, no team, just self-directed videos shot on my phone in NYC. I have 220+ voice memos because I can't stop writing. I recently stepped into a studio in Newark, NJ for the first time. The wider release is coming.",
       evidence: ["10,000+ YouTube views in 28 days — organic, no marketing budget","220+ voice memo recordings — songs in constant development","Studio recorded in Newark NJ; music videos self-directed in NYC"],
       tags: ["k_uma","hip hop","self-directed"]
     },
     "story": {
       headline: "From Staten Island Catholic schools to cold-calling Microsoft — the long version.",
-      narrative: "I grew up in Staten Island, went to Stuyvesant on merit, got a perfect ACT score, was accepted to UIUC as a James Scholar — and chose to leave and pursue engineering because I needed to provide for my family. I got my first job at 16, turned down Google at 17, won a hackathon at MIT at 18, built a platform that ended up on Charles Schwab's website, and I've been building ever since. The music came alongside all of it. I've never stopped.",
-      evidence: ["Stuyvesant High School → UIUC James Scholar (left to pursue engineering career)","ACT 36/36 perfect score; turned down Google CSSI for IGN Code Foo","LiquidTalent at 16 → IGN at 17 → MIT winner at 18 → Principal Engineer + Designer at 20"],
+      narrative: "I grew up in Staten Island, went to Stuyvesant on merit, got a perfect ACT score, and was accepted to UIUC as a James Scholar. College wasn't the right environment for me at the time — I failed out, came home, and decided to channel everything into building a real career. I got my first job at 16, turned down Google at 17, won a hackathon at MIT at 18, built a platform that ended up on Charles Schwab's website, and I've been building ever since. The music came alongside all of it. I've never stopped.",
+      evidence: ["Stuyvesant High School → UIUC James Scholar → came home and channeled everything into a real engineering career","ACT 36/36 perfect score; turned down Google CSSI for IGN Code Foo","LiquidTalent at 16 → IGN at 17 → MIT winner at 18 → Principal Engineer + Designer at 20"],
       tags: ["origin story","Staten Island","resilience"]
     }
   }
@@ -1003,14 +1008,15 @@ function updateSuggestions(){
   const pool=TOPIC_SUGGESTIONS[audience]||[];
   const filtered=pool.filter(s=>s.includes(val)||val.length===0).slice(0,5);
   suggestionsEl.innerHTML='';
-  if(filtered.length===0){suggestionsEl.classList.remove('visible');return;}
-  filtered.forEach(s=>{const d=document.createElement('div');d.className='topic-sug';d.textContent=s;d.addEventListener('click',()=>{topicInput.value=s;suggestionsEl.classList.remove('visible');doSearch();});suggestionsEl.appendChild(d);});
+  if(filtered.length===0){suggestionsEl.classList.remove('visible');document.getElementById('result-card').classList.remove('dropdown-open');return;}
+  filtered.forEach(s=>{const d=document.createElement('div');d.className='topic-sug';d.textContent=s;d.addEventListener('click',()=>{topicInput.value=s;suggestionsEl.classList.remove('visible');document.getElementById('result-card').classList.remove('dropdown-open');doSearch();});suggestionsEl.appendChild(d);});
   suggestionsEl.classList.add('visible');
+  document.getElementById('result-card').classList.add('dropdown-open');
 }
 topicInput.addEventListener('input',updateSuggestions);
 topicInput.addEventListener('focus',updateSuggestions);
 document.getElementById('audience-select').addEventListener('change',()=>{topicInput.value='';suggestionsEl.classList.remove('visible');});
-document.addEventListener('click',e=>{if(!e.target.closest('.topic-wrap'))suggestionsEl.classList.remove('visible');});
+document.addEventListener('click',e=>{if(!e.target.closest('.topic-wrap')){suggestionsEl.classList.remove('visible');document.getElementById('result-card').classList.remove('dropdown-open');}});
 document.getElementById('ask-btn').addEventListener('click',doSearch);
 topicInput.addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
 

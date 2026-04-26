@@ -612,6 +612,10 @@ select option{background:#141412;color:var(--fg);}
 .mode-btn.active{opacity:1;}
 .mode-btn-dark{background:#1a1a17;}
 .mode-btn-middle{background:linear-gradient(90deg,#1a1a17 50%,#f5f2ee 50%);}
+/* Hide middle option on desktop */
+@media(min-width:681px){
+  .mode-btn-middle{display:none;}
+}
 .mode-btn-light{background:#f5f2ee;border:1px solid rgba(0,0,0,0.15);}
 
 /* ── Light mode ── */
@@ -621,7 +625,8 @@ body.mode-light{
   --border:rgba(0,0,0,0.1);--bh:rgba(0,0,0,0.2);--fg-white:rgba(26,26,23,0.6);
 }
 body.mode-light #kuma-search,body.mode-light #ask-btn{background:rgba(0,0,0,0.04);color:var(--fg);}
-body.mode-light select{background:rgba(0,0,0,0.04);color:var(--fg);}
+body.mode-light #kuma-search::placeholder{color:rgba(26,26,23,0.45);}
+body.mode-light select{background:rgba(0,0,0,0.04);color:var(--fg);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='4'%3E%3Cpath d='M0 0l4 4 4-4z' fill='rgba(26,26,23,0.4)'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;}
 body.mode-light #topic-suggestions{background:#ede9e3;}
 body.mode-light .saved-strip{background:rgba(245,242,238,0.96);}
 body.mode-light .mode-toggle{background:rgba(245,242,238,0.7);border-color:rgba(0,0,0,0.12);}
@@ -644,8 +649,9 @@ body.mode-middle .content-col .contact-item{color:rgba(26,26,23,0.3);}
 body.mode-middle .content-col .identifier{color:rgba(26,26,23,0.3);}
 body.mode-middle .content-col .save-btn{border-color:rgba(0,0,0,0.12);color:rgba(26,26,23,0.4);}
 body.mode-middle .content-col #kuma-search{background:rgba(0,0,0,0.04);color:#1a1a17;border-color:rgba(0,0,0,0.1);}
+body.mode-middle .content-col #kuma-search::placeholder{color:rgba(26,26,23,0.4);}
 body.mode-middle .content-col #ask-btn{background:rgba(0,0,0,0.04);color:rgba(26,26,23,0.5);border-color:rgba(0,0,0,0.1);}
-body.mode-middle .content-col select{background:rgba(0,0,0,0.03);color:rgba(26,26,23,0.6);border-color:rgba(0,0,0,0.1);}
+body.mode-middle .content-col select{background:rgba(0,0,0,0.03);color:rgba(26,26,23,0.6);border-color:rgba(0,0,0,0.1);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='4'%3E%3Cpath d='M0 0l4 4 4-4z' fill='rgba(26,26,23,0.4)'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;}
 body.mode-middle .content-col #topic-suggestions{background:#ede9e3;border-color:rgba(0,0,0,0.1);}
 body.mode-middle .content-col .topic-sug{color:rgba(26,26,23,0.55);}
 body.mode-middle .content-col .topic-sug:hover{color:#1a1a17;}
@@ -668,7 +674,7 @@ body.mode-middle .content-col .what-should-i-know{color:rgba(26,26,23,0.6);}
 
       <!-- Search bar — first child so mobile order works -->
       <div class="search-bar-wrap">
-        <input id="kuma-search" type="text" placeholder="search anything..." autocomplete="off"/>
+        <input id="kuma-search" type="text" placeholder="search anything as a Founder..." autocomplete="off"/>
         <button id="ask-btn">ask</button>
       </div>
 
@@ -1287,10 +1293,29 @@ maybePrePopulate();
   }
   // Default: dark on desktop, light on mobile — unless user has saved a preference
   const savedMode = localStorage.getItem('kuma-mode');
-  const defaultMode = savedMode || (window.innerWidth <= 680 ? 'light' : 'dark');
+  const defaultMode = savedMode || (window.innerWidth <= 680 ? 'middle' : 'dark');
   setMode(defaultMode);
   Object.keys(btns).forEach(m=>{if(btns[m])btns[m].addEventListener('click',()=>setMode(m));});
 })();
+
+
+// Dynamic search placeholder based on audience
+function updatePlaceholder(){
+  const sel = document.getElementById('audience-select');
+  const input = document.getElementById('kuma-search');
+  if(!sel || !input) return;
+  const labels = {
+    'Founder': 'a Founder',
+    'Engineer': 'an Engineer',
+    'Designer': 'a Designer',
+    'Recruiter': 'a Recruiter',
+    'General Audience': 'a General Audience visitor'
+  };
+  const label = labels[sel.value] || sel.value;
+  input.placeholder = 'search anything as ' + label + '...';
+}
+updatePlaceholder();
+document.getElementById('audience-select').addEventListener('change', updatePlaceholder);
 
 </script>
 </body>

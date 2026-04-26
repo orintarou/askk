@@ -1254,6 +1254,19 @@ function maybePrePopulate(){
 }
 maybePrePopulate();
 
+// Seed saved strip with showcase cards on mobile first load
+if(window.innerWidth <= 680 && !localStorage.getItem('kuma_v4_saved')){
+  const seeds = [
+    { audience:'Engineer', topic:'React and TypeScript depth', ...findPrebaked('Engineer','react') },
+    { audience:'Engineer', topic:'Component design philosophy', ...findPrebaked('Engineer','production') },
+    { audience:'Founder',  topic:'Early hire potential',       ...findPrebaked('Founder','early hire') },
+  ].filter(c => c.headline);
+  if(seeds.length){
+    savedCards = seeds;
+    renderSaved();
+  }
+}
+
 // Trigger once when crossing into mobile viewport width
 (function(){
   let wasMobile = window.innerWidth <= 680;

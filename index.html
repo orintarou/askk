@@ -284,6 +284,7 @@ select option{background:#141412;color:var(--fg);}
   flex:1;
   position:relative;
   z-index:1;
+  min-height:320px;
 }
 .result-area.dropdown-open{pointer-events:none;}
 
@@ -292,33 +293,35 @@ select option{background:#141412;color:var(--fg);}
   transform:translateY(10px);
   transition:opacity 0.5s,transform 0.5s;
   display:none;
+  position:relative;
+  z-index:2;
 }
 .result-card.visible{display:block;}
 .result-card.in{opacity:1;transform:translateY(0);}
 
 .card-eyebrow{
-  font-size:8.5px;letter-spacing:0.16em;text-transform:uppercase;
+  font-size:6.375px;letter-spacing:0.16em;text-transform:uppercase;
   color:var(--fg3);margin-bottom:0.75rem;
 }
 .card-headline{
   font-family:'Syne',sans-serif;
-  font-size:16px;font-weight:700;
+  font-size:12px;font-weight:700;
   color:var(--fg);line-height:1.2;
   margin-bottom:0.75rem;letter-spacing:-0.01em;
   word-break:break-word;
 }
 .card-narrative{
-  font-size:12.5px;font-weight:300;line-height:1.85;
+  font-size:9.375px;font-weight:300;line-height:1.85;
   color:var(--fg2);margin-bottom:1rem;
   word-break:break-word;
 }
 .card-evidence{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem;}
 .ev-item{display:flex;align-items:flex-start;gap:0.5rem;}
 .ev-dot{width:3px;height:3px;border-radius:50%;background:var(--fg3);margin-top:6px;flex-shrink:0;}
-.ev-text{font-size:11px;font-weight:300;color:var(--fg3);line-height:1.6;word-break:break-word;}
+.ev-text{font-size:8.25px;font-weight:300;color:var(--fg3);line-height:1.6;word-break:break-word;}
 .card-tags{display:flex;flex-wrap:wrap;gap:0.35rem;}
 .card-tag{
-  font-size:8.5px;letter-spacing:0.12em;text-transform:uppercase;
+  font-size:6.375px;letter-spacing:0.12em;text-transform:uppercase;
   color:var(--fg3);border:0.5px solid var(--border);
   padding:3px 9px;border-radius:20px;
 }
@@ -340,19 +343,22 @@ select option{background:#141412;color:var(--fg);}
   color:rgba(232,228,220,0.25);
   letter-spacing:0.1em;
   font-style:italic;
+  position:absolute;
+  top:0;left:0;right:0;
+  height:280px;
   display:flex;
   align-items:center;
   justify-content:center;
-  height:280px;
   transform:rotate(-20deg);
   transform-origin:center center;
   transition:opacity 0.4s;
+  pointer-events:none;
 }
 .empty-state.faded{
   opacity:0;
 }
 .empty-state.visible{opacity:1;}
-.empty-state.instant-hide{opacity:0;transition:none;}
+.empty-state.instant-hide{opacity:0;transition:none;height:0;margin:0;overflow:hidden;}
 
 /* ── Loading ── */
 .loading{display:none;align-items:center;gap:0.55rem;margin:1rem 0;}
@@ -429,6 +435,78 @@ select option{background:#141412;color:var(--fg);}
   letter-spacing:0.07em;
   text-align:right;
 }
+
+/* ── Saved strip — fixed bottom ── */
+.saved-strip{
+  display:none;
+  position:fixed;
+  bottom:0;left:0;right:0;
+  background:rgba(10,10,9,0.96);
+  border-top:0.5px solid var(--border);
+  z-index:100;
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.saved-strip-inner{
+  display:flex;
+  align-items:center;
+  gap:1rem;
+  padding:0.6rem 1.5rem;
+  max-width:var(--container-w);
+  margin:0 auto;
+}
+.saved-strip-label{
+  font-size:8px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--fg4);
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.saved-strip-cards{
+  display:flex;
+  gap:0.6rem;
+  overflow-x:auto;
+  flex:1;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+  padding:0.1rem 0;
+}
+.saved-strip-cards::-webkit-scrollbar{display:none;}
+.saved-strip-clear{
+  font-size:8px;
+  color:var(--fg4);
+  background:none;
+  border:none;
+  cursor:pointer;
+  letter-spacing:0.07em;
+  text-decoration:underline;
+  text-underline-offset:3px;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.saved-strip-clear:hover{color:var(--fg2);}
+
+/* Override saved-card for horizontal strip layout */
+.saved-strip .saved-card{
+  border:0.5px solid var(--border);
+  border-radius:7px;
+  padding:0.5rem 0.8rem;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  gap:0.15rem;
+  min-width:160px;
+  max-width:200px;
+  width:180px;
+  flex-shrink:0;
+  overflow:hidden;
+  transition:border-color 0.2s,background 0.2s;
+}
+.saved-strip .saved-card:hover{border-color:var(--bh);background:rgba(255,255,255,0.02);}
+.saved-strip .saved-card-query{font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--fg4);}
+.saved-strip .saved-card-headline{font-family:'Syne',sans-serif;font-size:10px;font-weight:500;color:var(--fg2);line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.saved-strip .saved-card-del{display:none;}
 
 /* ── Animations ── */
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
@@ -519,13 +597,7 @@ select option{background:#141412;color:var(--fg);}
 
           <div class="error-msg" id="error-msg"></div>
 
-          <div class="saved-section" id="saved-section">
-            <div class="saved-header">
-              <div class="saved-label">saved</div>
-              <button class="clear-btn" id="clear-btn">clear all</button>
-            </div>
-            <div class="saved-grid" id="saved-grid"></div>
-          </div>
+
         </div>
 
         <!-- Footer -->
@@ -541,6 +613,14 @@ select option{background:#141412;color:var(--fg);}
       </div><!-- /content-col -->
     </div><!-- /composition -->
   </div><!-- /container -->
+  <!-- Saved cards strip — fixed bottom -->
+  <div class="saved-strip" id="saved-section">
+    <div class="saved-strip-inner">
+      <div class="saved-strip-label">saved</div>
+      <div class="saved-strip-cards" id="saved-grid"></div>
+      <button class="saved-strip-clear" id="clear-btn">clear</button>
+    </div>
+  </div>
 </div><!-- /page -->
 
 
@@ -858,12 +938,11 @@ function renderSaved(){
   const section=document.getElementById('saved-section');
   grid.innerHTML='';
   if(savedCards.length===0){section.style.display='none';return;}
-  section.style.display='block';
+  section.style.display='flex';
   savedCards.forEach((card,i)=>{
     const el=document.createElement('div');el.className='saved-card';
-    el.innerHTML=`<div style="flex:1"><div class="saved-card-query">${card.audience} · ${card.topic}</div><div class="saved-card-headline">${card.headline}</div></div><div class="saved-card-del" data-i="${i}">✕</div>`;
-    el.querySelector('div').addEventListener('click',()=>expandCard(card));
-    el.querySelector('.saved-card-del').addEventListener('click',(e)=>{e.stopPropagation();savedCards.splice(i,1);persistSaved();renderSaved();});
+    el.innerHTML=`<div class="saved-card-query">${card.audience} · ${card.topic}</div><div class="saved-card-headline">${card.headline}</div>`;
+    el.addEventListener('click',()=>expandCard(card));
     grid.appendChild(el);
   });
 }
@@ -875,7 +954,7 @@ function expandCard(card){renderResult(card,card.audience,card.topic);window.scr
 let currentResult=null;
 function renderResult(parsed,audience,topic){
   const emptyState=document.getElementById('empty-state');
-  if(emptyState){emptyState.classList.remove('fade-in');void emptyState.offsetWidth;emptyState.classList.add('instant-hide');}
+  if(emptyState)emptyState.remove();
   const te4=document.getElementById('trailing-ellipsis');
   if(te4){te4.classList.remove('visible');void te4.offsetWidth;te4.classList.add('instant-hide');}
   currentResult={...parsed,audience,topic};
@@ -900,7 +979,7 @@ document.getElementById('save-btn').classList.add('visible');
 /* ── I. doSearch — prebaked → session cache → API ── */
 async function doSearch(){
   const audience=document.getElementById('audience-select').value;
-  const topic=document.getElementById('topic-input').value.trim();
+  const topic=document.getElementById('kuma-search').value.trim();
   if(!topic)return;
   const btn=document.getElementById('ask-btn');
   const loading=document.getElementById('loading');
@@ -910,7 +989,7 @@ async function doSearch(){
   errorMsg.classList.remove('visible');
   document.getElementById('save-btn').classList.remove('visible');
   document.getElementById('topic-suggestions').classList.remove('visible');
-  document.getElementById('search-hint').style.opacity='0';
+  const sh=document.getElementById('search-hint');if(sh)sh.style.opacity='0';
 
   // 1. Check pre-baked cache first (free, instant)
   const prebaked = findPrebaked(audience, topic);

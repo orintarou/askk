@@ -517,7 +517,7 @@ select option{background:#141412;color:var(--fg);}
 
 /* ── Mobile ── */
 @media(max-width:680px){
-  :root{--portrait-w:100%;--portrait-h:260px;--container-w:100%;}
+  :root{--portrait-w:100%;--portrait-h:182px;--container-w:100%;}
 
   .page{padding:0;align-items:flex-start;}
   .container{max-width:100%;overflow-x:hidden;}
@@ -530,6 +530,8 @@ select option{background:#141412;color:var(--fg);}
     cursor:pointer;
     transition:opacity 0.2s,transform 0.15s;
     opacity:0.4;
+    -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;
   }
 
   /* Composition: vertical stack */
@@ -617,8 +619,14 @@ select option{background:#141412;color:var(--fg);}
   cursor:pointer;
   transition:opacity 0.2s,transform 0.15s;
   opacity:0.4;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
 }
 .mode-btn:hover{opacity:0.8;transform:scale(1.15);}
+@media(hover:none){
+  .mode-btn:hover{opacity:0.4;transform:none;}
+  .mode-btn.active{opacity:1;}
+}
 .mode-btn.active{opacity:1;}
 .mode-btn-dark{background:#1a1a17;}
 .mode-btn-middle{background:linear-gradient(90deg,#1a1a17 50%,#f5f2ee 50%);}
@@ -1334,7 +1342,7 @@ if(window.innerWidth <= 680 && !localStorage.getItem('kuma_v4_saved')){
   const isDesktop = window.innerWidth > 680;
   // On desktop, middle mode is never valid — fall back to dark
   const sanitized = (isDesktop && savedMode === 'middle') ? 'dark' : savedMode;
-  const defaultMode = sanitized || (isDesktop ? 'dark' : 'middle');
+  const defaultMode = sanitized || (isDesktop ? 'dark' : 'light');
   setMode(defaultMode);
   Object.keys(btns).forEach(m=>{if(btns[m])btns[m].addEventListener('click',()=>setMode(m));});
 })();

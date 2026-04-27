@@ -522,6 +522,16 @@ select option{background:#141412;color:var(--fg);}
   .page{padding:0;align-items:flex-start;}
   .container{max-width:100%;overflow-x:hidden;}
 
+  /* increase mode button sizes on mobile */
+  .mode-btn{
+    width:13px;height:13px;
+    border-radius:50%;
+    border:none;
+    cursor:pointer;
+    transition:opacity 0.2s,transform 0.15s;
+    opacity:0.4;
+  }
+
   /* Composition: vertical stack */
   .composition{
     flex-direction:column;
@@ -866,7 +876,7 @@ Self-directed music videos. Planning wider release.
 
 WHAT MAKES KUMA DIFFERENT
 - Principal engineer AND principal designer at the same company — a genuinely rare combination.
-- Built real fintech products for wealth managers and institutional partners from scratch, as the sole developer — kept live for high-stakes demos with BlackRock and Two Sigma.
+- Built real fintech products for wealth managers and institutional partners from scratch, as the sole developer — kept live for high-stakes demos with BlackRock and our pre-seed investor.
 - Self-directed: organized events, cold-called Microsoft, appeared on podcasts.
 - Exceptional communicator — multiple employers note his writing, presence, and professionalism as standout.
 - Obsessive attention to detail. Real personal arc through adversity, now building across tech and music simultaneously.
@@ -1327,7 +1337,10 @@ if(window.innerWidth <= 680 && !localStorage.getItem('kuma_v4_saved')){
   }
   // Default: dark on desktop, light on mobile — unless user has saved a preference
   const savedMode = localStorage.getItem('kuma-mode');
-  const defaultMode = savedMode || (window.innerWidth <= 680 ? 'middle' : 'dark');
+  const isDesktop = window.innerWidth > 680;
+  // On desktop, middle mode is never valid — fall back to dark
+  const sanitized = (isDesktop && savedMode === 'middle') ? 'dark' : savedMode;
+  const defaultMode = sanitized || (isDesktop ? 'dark' : 'middle');
   setMode(defaultMode);
   Object.keys(btns).forEach(m=>{if(btns[m])btns[m].addEventListener('click',()=>setMode(m));});
 })();

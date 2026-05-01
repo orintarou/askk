@@ -1291,11 +1291,11 @@ function removeMiddleToggle(currentMode){
     setMode((currentMode === "mode-light" || currentMode === "mode-middle") ? "light" : "dark");
 }
 
-// Seed saved strip with showcase cards on mobile first load
-if(window.innerWidth <= 680 && !localStorage.getItem('kuma_v4_saved')){
+// Seed saved strip with showcase cards on first load (mobile and desktop)
+if(!localStorage.getItem('kuma_v4_saved')){
   const seeds = [
     { audience:'Engineer', topic:'React and TypeScript depth', ...findPrebaked('Engineer','react') },
-    { audience:'Engineer', topic:'Component design philosophy', ...findPrebaked('Engineer','production') },
+    { audience:'General Audience', topic:'Who is Kuma', ...findPrebaked('General Audience','who') },
     { audience:'Founder',  topic:'Early hire potential',       ...findPrebaked('Founder','early hire') },
   ].filter(c => c.headline);
   if(seeds.length){

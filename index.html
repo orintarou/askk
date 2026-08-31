@@ -1355,9 +1355,9 @@ if(!localStorage.getItem('kuma_v4_saved')){
   // Default: dark on desktop, light on mobile — unless user has saved a preference
   const savedMode = localStorage.getItem('kuma-mode');
   const isDesktop = window.innerWidth > 680;
-  // On desktop, middle mode is never valid — fall back to dark
+  // On desktop, middle mode is never valid — fall back to light
   const sanitized = (isDesktop && savedMode === 'middle') ? 'light' : savedMode;
-  const defaultMode = sanitized || (isDesktop ? 'light' : 'dark');
+  const defaultMode = sanitized || (isDesktop ? 'light' : 'middle');
   setMode(defaultMode);
   Object.keys(btns).forEach(m=>{if(btns[m])btns[m].addEventListener('click',()=>setMode(m));});
 })();
